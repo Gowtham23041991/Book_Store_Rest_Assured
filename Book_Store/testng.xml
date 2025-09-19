@@ -1,0 +1,36 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Regression" parallel="classes" thread-count="5" configfailurepolicy="continue" verbose="10" >
+    <test name="bookstore_api_automation" thread-count="5">
+        <method-selectors>
+            <method-selector>
+                <script language="beanshell">
+                    <![CDATA[
+                    String groupsToRun = System.getProperty("groupsToRun","");
+                    String groupsNotToRun = System.getProperty("groupsNotToRun","");
+                    //System.out.println("Trimble UI Group to run: " + groupsToRun );
+
+                    if ( groupsToRun.equals("")) {
+                        return true;
+                    }
+                    else {
+                        StringTokenizer groupsToRunList = new StringTokenizer(groupsToRun, ",");
+                        while (groupsToRunList.hasMoreTokens()) {
+                            if (groups.containsKey(groupsToRunList.nextToken())) {
+                                return true;
+                            }
+                        }
+                        // If we made it here, we didn't find a match
+                        return false;
+                    }
+                ]]>
+                </script>
+            </method-selector>
+        </method-selectors>
+    </test>
+    <test name="Api_Automation" thread-count="5">
+        <packages>
+            <package name="org.bookstore"></package>
+        </packages>
+    </test>
+
+</suite>
